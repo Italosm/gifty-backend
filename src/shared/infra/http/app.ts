@@ -10,6 +10,9 @@ import { fastifyCors } from '@fastify/cors'
 import ScalarApiReference from '@scalar/fastify-api-reference'
 import registerRoutes from './routes'
 
+import { errorHandler } from '@/shared/infra/http/middlewares/error-handler'
+import { urlNotFoundHandler } from '@/shared/infra/http/middlewares/handlers/url-not-found'
+
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setValidatorCompiler(validatorCompiler)
@@ -35,4 +38,8 @@ app.register(ScalarApiReference, {
 })
 
 registerRoutes(app)
+
+app.setNotFoundHandler(urlNotFoundHandler)
+app.setErrorHandler(errorHandler)
+
 export { app }
